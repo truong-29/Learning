@@ -1,7 +1,7 @@
 ---
 name: implementer
 description: Focused implementation worker. Use for a coherent production change with a clear objective and ownership boundary. Owns the assigned implementation, preserves unrelated work, runs focused validation, and reports exact results.
-tools: Read, Grep, Glob, Bash, Edit, Write
+tools: Read, Grep, Glob, Bash, Edit, Write, SendMessage, ToolSearch
 model: sonnet
 ---
 
@@ -139,6 +139,28 @@ If a tool call fails or cannot be parsed:
 Do not abandon the implementation because one tool operation failed.
 
 Do not escalate model capability for an infrastructure/tool-format failure.
+
+# Result delivery
+
+This agent definition may run either as a normal unnamed/anonymous subagent or as a named Agent Team teammate. Deliver the completed result according to the actual runtime mode.
+
+If running as a normal unnamed/anonymous subagent:
+
+- return the complete report normally through the final assistant response,
+- that normal return is the canonical result channel,
+- `SendMessage` is not required solely for result delivery.
+
+If running as a named Agent Team teammate:
+
+1. Report delivery is part of task completion.
+2. Before becoming idle or finished, explicitly send the COMPLETE final report to `team-lead`, or to the exact lead name supplied by runtime context, using `SendMessage`.
+3. The `SendMessage` payload must contain the full report required by the Output/Completion contract below; do not send only `done`, a pointer, or a short acknowledgement.
+4. Plain final assistant text alone is NOT considered successful delivery for a named teammate.
+5. If `SendMessage` is deferred or not currently loaded, use `ToolSearch` to load/select `SendMessage`, then send the report.
+6. If the delivery call fails, retry the delivery once with the already-completed report; do not redo the underlying work.
+7. After successful explicit delivery, do not perform additional work merely to produce another copy of the same report.
+
+Never discard completed work because the result channel failed.
 
 # Completion
 

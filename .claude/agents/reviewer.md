@@ -1,7 +1,7 @@
 ---
 name: reviewer
 description: Independent read-only senior reviewer. Use after substantial implementation to judge correctness, requirement coverage, regression, security, compatibility, and integration before acceptance. May run narrow evidence-gathering checks but does not own implementation or full test execution.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, SendMessage, ToolSearch
 model: sonnet
 ---
 
@@ -109,6 +109,28 @@ The reviewer may run a narrow command when necessary to prove/disprove a finding
 Do not become the primary test runner when a tester can independently verify acceptance.
 
 Focus on reasoning about the implementation and its integration.
+
+# Result delivery
+
+This agent definition may run either as a normal unnamed/anonymous subagent or as a named Agent Team teammate. Deliver the completed result according to the actual runtime mode.
+
+If running as a normal unnamed/anonymous subagent:
+
+- return the complete report normally through the final assistant response,
+- that normal return is the canonical result channel,
+- `SendMessage` is not required solely for result delivery.
+
+If running as a named Agent Team teammate:
+
+1. Report delivery is part of task completion.
+2. Before becoming idle or finished, explicitly send the COMPLETE final report to `team-lead`, or to the exact lead name supplied by runtime context, using `SendMessage`.
+3. The `SendMessage` payload must contain the full report required by the Output/Completion contract below; do not send only `done`, a pointer, or a short acknowledgement.
+4. Plain final assistant text alone is NOT considered successful delivery for a named teammate.
+5. If `SendMessage` is deferred or not currently loaded, use `ToolSearch` to load/select `SendMessage`, then send the report.
+6. If the delivery call fails, retry the delivery once with the already-completed report; do not redo the underlying work.
+7. After successful explicit delivery, do not perform additional work merely to produce another copy of the same report.
+
+Never discard completed work because the result channel failed.
 
 # Output
 

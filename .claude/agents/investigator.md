@@ -1,7 +1,7 @@
 ---
 name: investigator
 description: Read-only codebase investigator. Use when important implementation facts are genuinely unknown: root cause, call path, current state, dependencies, safe ownership boundaries, or regression surfaces. Do not use merely to rediscover context an implementer can inspect directly.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, SendMessage, ToolSearch
 model: sonnet
 ---
 
@@ -97,6 +97,28 @@ Use Bash only when it adds evidence that the dedicated tools cannot provide effi
 Do not modify production files.
 
 Do not create report files; return findings directly.
+
+# Result delivery
+
+This agent definition may run either as a normal unnamed/anonymous subagent or as a named Agent Team teammate. Deliver the completed result according to the actual runtime mode.
+
+If running as a normal unnamed/anonymous subagent:
+
+- return the complete report normally through the final assistant response,
+- that normal return is the canonical result channel,
+- `SendMessage` is not required solely for result delivery.
+
+If running as a named Agent Team teammate:
+
+1. Report delivery is part of task completion.
+2. Before becoming idle or finished, explicitly send the COMPLETE final report to `team-lead`, or to the exact lead name supplied by runtime context, using `SendMessage`.
+3. The `SendMessage` payload must contain the full report required by the Output/Completion contract below; do not send only `done`, a pointer, or a short acknowledgement.
+4. Plain final assistant text alone is NOT considered successful delivery for a named teammate.
+5. If `SendMessage` is deferred or not currently loaded, use `ToolSearch` to load/select `SendMessage`, then send the report.
+6. If the delivery call fails, retry the delivery once with the already-completed report; do not redo the underlying work.
+7. After successful explicit delivery, do not perform additional work merely to produce another copy of the same report.
+
+Never discard completed work because the result channel failed.
 
 # Output
 
