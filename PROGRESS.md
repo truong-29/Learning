@@ -5,7 +5,7 @@
 
 Khóa học chia theo **3 track trình độ** (Beginner → Intermediate → Advanced). Trong mỗi bài, bài tập chia **3 mức độ khó** (Dễ/Trung bình/Khó — chuẩn LeetCode).
 
-**Tiến độ Track Cơ bản:** 1/12 bài
+**Tiến độ Track Cơ bản:** 2/12 bài
 
 ---
 
@@ -13,7 +13,7 @@ Khóa học chia theo **3 track trình độ** (Beginner → Intermediate → Ad
 📂 [01-co-ban/](01-co-ban/README.md) · Mục tiêu: hiểu cú pháp, viết chương trình nhỏ.
 
 - [x] **Bài 01** — Cài đặt & công cụ · [mở](01-co-ban/lessons/01-cai-dat-va-cong-cu/README.md)
-- [ ] **Bài 02** — Biến & kiểu dữ liệu · [mở](01-co-ban/lessons/02-bien-va-kieu-du-lieu/README.md)
+- [x] **Bài 02** — Biến & kiểu dữ liệu · [mở](01-co-ban/lessons/02-bien-va-kieu-du-lieu/README.md)
 - [ ] **Bài 03** — Toán tử & Input/Output · [mở](01-co-ban/lessons/03-toan-tu-input-output/README.md)
 - [ ] **Bài 04** — Câu điều kiện · [mở](01-co-ban/lessons/04-cau-dieu-kien/README.md)
 - [ ] **Bài 05** — Vòng lặp · [mở](01-co-ban/lessons/05-vong-lap/README.md)
